@@ -10,4 +10,5 @@ public interface IOSwerveModule {
 	public void resetEncoders();
 	public void update(double dt); // TODO: Sim hack
 	public SwerveModuleState getDesiredState();
+    public double getTurnEncoderPosition();
 }

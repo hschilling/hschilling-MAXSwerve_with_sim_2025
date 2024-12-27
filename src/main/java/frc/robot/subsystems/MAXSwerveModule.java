@@ -145,4 +145,9 @@ public class MAXSwerveModule implements IOSwerveModule{
 
 	}
 
+
+  public double getTurnEncoderPosition() {
+    return m_turningEncoder.getPosition();
+ };
+
 }

@@ -4,8 +4,15 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public class SimSwerveModule implements IOSwerveModule {
-	SwerveModuleState state = new SwerveModuleState();
+    // Represents the state of one swerve module. Fields are:
+    //       Rotation2d angle (angle of the module)
+    //       double distanceMeters (Distance measured by the wheel of the module)
 	SwerveModulePosition pos = new SwerveModulePosition();
+
+    // Represents the state of one swerve module. Fields are:
+    //       Rotation2d angle (angle of the module)
+    //       double speedMetersPerSecond (Speed of the wheel of the module)
+    SwerveModuleState state = new SwerveModuleState();
 
 	@Override
 	public SwerveModuleState getState() {
@@ -34,7 +41,6 @@ public class SimSwerveModule implements IOSwerveModule {
 		double dist = state.speedMetersPerSecond * dt + pos.distanceMeters;
 		var angle = state.angle;
 		pos = new SwerveModulePosition(dist, angle);
-
 	}
 
 	@Override
@@ -42,4 +48,8 @@ public class SimSwerveModule implements IOSwerveModule {
 		return null;
 	}
 
+    public double getTurnEncoderPosition() {
+        return state.angle.getRadians();
+     };
+  
 }

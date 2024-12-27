@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -15,6 +16,9 @@ import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
@@ -37,6 +41,13 @@ public class DriveSubsystem extends SubsystemBase {
 
   // Odometry class for tracking robot pose
   private SwerveDriveOdometry m_odometry;
+
+    private final Field2d field2d = new Field2d();
+  private final Field2d visionField = new Field2d();
+  private FieldObject2d frontLeftField2dModule = field2d.getObject("front left module");
+  private FieldObject2d rearLeftField2dModule = field2d.getObject("rear left module");
+  private FieldObject2d frontRightField2dModule = field2d.getObject("front right module");
+  private FieldObject2d rearRightField2dModule = field2d.getObject("rear right module");
 
 
   /** Creates a new DriveSubsystem. */
@@ -79,6 +90,8 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
       });
 
+    SmartDashboard.putData(field2d);
+
   }
 
   @Override
@@ -93,6 +106,26 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         });
       pose2d = getPose();
+
+
+      field2d.setRobotPose(pose2d);
+
+    frontLeftField2dModule.setPose(pose2d.transformBy(new Transform2d(
+        Constants.DriveConstants.FRONT_LEFT_OFFSET,
+        new Rotation2d(m_frontLeft.getTurnEncoderPosition()))));
+
+    rearLeftField2dModule.setPose(pose2d.transformBy(new Transform2d(
+        Constants.DriveConstants.REAR_LEFT_OFFSET,
+        new Rotation2d(m_rearLeft.getTurnEncoderPosition()))));
+
+    frontRightField2dModule.setPose(pose2d.transformBy(new Transform2d(
+        Constants.DriveConstants.FRONT_RIGHT_OFFSET,
+        new Rotation2d(m_frontRight.getTurnEncoderPosition()))));
+
+    rearRightField2dModule.setPose(pose2d.transformBy(new Transform2d(
+        Constants.DriveConstants.REAR_RIGHT_OFFSET,
+        new Rotation2d(m_rearRight.getTurnEncoderPosition()))));
+
   }
 
   /**
